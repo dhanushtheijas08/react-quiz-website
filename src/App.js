@@ -11,6 +11,8 @@ const initalState = {
   // "loading", "error", "ready", "active", "finished"
   status: "loading",
   index: 0,
+  answer: null,
+  points: 0,
 };
 const reducer = function (state, action) {
   switch (action.type) {
@@ -20,14 +22,29 @@ const reducer = function (state, action) {
     case "dataFailed":
       return { ...state, status: "error" };
 
-    case "ready":
+    case "startGame":
       return { ...state, status: "active" };
+
+    case "clickedOption":
+      // optionIndex, correctOption
+      const userPoint =
+        action.payload.optionIndex === action.payload.correctOption
+          ? state.points + action.payload.maxPoints
+          : state.points;
+      return {
+        ...state,
+        answer: action.payload.optionIndex,
+        points: userPoint,
+      };
+
+    case "incrementIndex":
+      return { ...state, index: state.index + 1, answer: null };
     default:
-      break;
+      return "hi";
   }
 };
 function App() {
-  const [{ questions, status, index }, dispatch] = useReducer(
+  const [{ questions, index, status, answer, points }, dispatch] = useReducer(
     reducer,
     initalState
   );
@@ -52,9 +69,11 @@ function App() {
         )}
         {status === "active" && (
           <MountQuestions
-            questions={questions}
-            index={index}
+            question={questions[index]}
             dispatch={dispatch}
+            answer={answer}
+            index={index}
+            points={points}
           />
         )}
       </Main>
