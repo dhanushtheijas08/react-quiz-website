@@ -1,13 +1,13 @@
 function Progress({
   totalQuestions,
-  questionAttended,
+  attendedQuestions,
   totalpoints,
   gainedPoints,
 }) {
   return (
     <div className="progress">
       <h2>
-        {questionAttended || 0} / {totalQuestions} question
+        {attendedQuestions || 0} / {totalQuestions} question
       </h2>
       <h2>
         {gainedPoints || 0} / {totalpoints} points

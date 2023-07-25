@@ -13,6 +13,7 @@ const initalState = {
   index: 0,
   answer: null,
   points: 0,
+  attendedQuestions: 0,
 };
 const reducer = function (state, action) {
   switch (action.type) {
@@ -35,6 +36,7 @@ const reducer = function (state, action) {
         ...state,
         answer: action.payload.optionIndex,
         points: userPoint,
+        attendedQuestions: state.attendedQuestions + 1,
       };
 
     case "incrementIndex":
@@ -44,10 +46,10 @@ const reducer = function (state, action) {
   }
 };
 function App() {
-  const [{ questions, index, status, answer, points }, dispatch] = useReducer(
-    reducer,
-    initalState
-  );
+  const [
+    { questions, index, status, answer, points, attendedQuestions },
+    dispatch,
+  ] = useReducer(reducer, initalState);
 
   useEffect(() => {
     fetch("http://localhost:9000/questions")
@@ -72,7 +74,7 @@ function App() {
             question={questions[index]}
             dispatch={dispatch}
             answer={answer}
-            index={index}
+            attendedQuestions={attendedQuestions}
             points={points}
           />
         )}

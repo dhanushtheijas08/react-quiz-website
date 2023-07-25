@@ -1,7 +1,13 @@
 import Options from "./Options";
 import Progress from "./Progress";
 
-function MountQuestions({ question, dispatch, answer, index, points }) {
+function MountQuestions({
+  question,
+  dispatch,
+  answer,
+  attendedQuestions,
+  points,
+}) {
   const hasAnswer = answer !== null;
   const renderButton = question.options.map((option, optionIndex) => (
     <Options
@@ -18,7 +24,7 @@ function MountQuestions({ question, dispatch, answer, index, points }) {
     <div>
       <Progress
         totalQuestions={15}
-        questionAttended={index}
+        attendedQuestions={attendedQuestions}
         totalpoints={15 * 10}
         gainedPoints={points}
       />
