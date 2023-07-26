@@ -15,18 +15,28 @@ const initalState = {
   answer: null,
   points: 0,
   attendedQuestions: 0,
+  timeToComplete: null,
 };
 let maxPoints;
+const TIME_TO_COMPLETE_ONE_QUESTION = 10;
 const reducer = function (state, action) {
   switch (action.type) {
     case "dataReceived":
-      return { ...state, questions: action.payload, status: "ready" };
+      return {
+        ...state,
+        questions: action.payload,
+        status: "ready",
+      };
 
     case "dataFailed":
       return { ...state, status: "error" };
 
     case "startGame":
-      return { ...state, status: "active" };
+      return {
+        ...state,
+        status: "active",
+        timeToComplete: state.questions.length * TIME_TO_COMPLETE_ONE_QUESTION,
+      };
 
     case "clickedOption":
       const userPoint =
@@ -46,6 +56,9 @@ const reducer = function (state, action) {
     case "completed":
       return { ...state, status: "finished" };
 
+    case "decrementTimer":
+      return { ...state, timeToComplete: state.timeToComplete - 1 };
+
     case "timeOut":
       return { ...state, status: "finished" };
 
@@ -57,7 +70,15 @@ const reducer = function (state, action) {
 };
 function App() {
   const [
-    { questions, index, status, answer, points, attendedQuestions },
+    {
+      questions,
+      index,
+      status,
+      answer,
+      points,
+      attendedQuestions,
+      timeToComplete,
+    },
     dispatch,
   ] = useReducer(reducer, initalState);
 
@@ -102,6 +123,7 @@ function App() {
               dispatch={dispatch}
               answer={answer}
               attendedQuestions={attendedQuestions}
+              timeToComplete={timeToComplete}
             />
           </>
         )}

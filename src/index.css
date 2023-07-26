@@ -264,3 +264,7 @@ progress {
 .pt-10 {
   padding-top: 30px;
 }
+
+.w-fit {
+  max-width: fit-content;
+}

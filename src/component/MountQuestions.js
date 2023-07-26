@@ -1,7 +1,13 @@
 import Options from "./Options";
 import Timer from "./Timer";
 
-function MountQuestions({ question, dispatch, answer, attendedQuestions }) {
+function MountQuestions({
+  question,
+  dispatch,
+  answer,
+  attendedQuestions,
+  timeToComplete,
+}) {
   const hasAnswer = answer !== null;
   const renderButton = question.options.map((option, optionIndex) => (
     <Options
@@ -30,7 +36,7 @@ function MountQuestions({ question, dispatch, answer, attendedQuestions }) {
         </button>
       )}
 
-      <Timer dispatch={dispatch} />
+      <Timer dispatch={dispatch} timeToComplete={timeToComplete} />
     </div>
   );
 }
