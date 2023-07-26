@@ -10,7 +10,6 @@ import Progress from "./component/Progress";
 import Finished from "./component/Finished";
 const initalState = {
   questions: [],
-  // "loading", "error", "ready", "active", "finished"
   status: "loading",
   index: 0,
   answer: null,
@@ -30,7 +29,6 @@ const reducer = function (state, action) {
       return { ...state, status: "active" };
 
     case "clickedOption":
-      // optionIndex, correctOption
       const userPoint =
         action.payload.optionIndex === action.payload.correctOption
           ? state.points + action.payload.maxPoints
@@ -47,6 +45,12 @@ const reducer = function (state, action) {
 
     case "completed":
       return { ...state, status: "finished" };
+
+    case "timeOut":
+      return { ...state, status: "finished" };
+
+    case "reset":
+      return { ...initalState, questions: state.questions, status: "ready" };
     default:
       return "hi";
   }
@@ -74,7 +78,6 @@ function App() {
   return (
     <div>
       <Header />
-
       <Main>
         {status === "loading" && <Loader />}
         {status === "error" && <Error />}

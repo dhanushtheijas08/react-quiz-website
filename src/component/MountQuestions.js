@@ -1,4 +1,5 @@
 import Options from "./Options";
+import Timer from "./Timer";
 
 function MountQuestions({ question, dispatch, answer, attendedQuestions }) {
   const hasAnswer = answer !== null;
@@ -28,6 +29,8 @@ function MountQuestions({ question, dispatch, answer, attendedQuestions }) {
           Next
         </button>
       )}
+
+      <Timer dispatch={dispatch} />
     </div>
   );
 }
