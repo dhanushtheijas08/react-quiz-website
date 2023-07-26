@@ -1,13 +1,6 @@
 import Options from "./Options";
-import Progress from "./Progress";
 
-function MountQuestions({
-  question,
-  dispatch,
-  answer,
-  attendedQuestions,
-  points,
-}) {
+function MountQuestions({ question, dispatch, answer, attendedQuestions }) {
   const hasAnswer = answer !== null;
   const renderButton = question.options.map((option, optionIndex) => (
     <Options
@@ -22,19 +15,14 @@ function MountQuestions({
   ));
   return (
     <div>
-      <Progress
-        totalQuestions={15}
-        attendedQuestions={attendedQuestions}
-        totalpoints={15 * 10}
-        gainedPoints={points}
-      />
       <h3> {question.question} </h3>
       <div className="options">{renderButton}</div>
       {hasAnswer && (
         <button
           className="btn btn-ui"
           onClick={() => {
-            dispatch({ type: "incrementIndex" });
+            if (attendedQuestions < 15) dispatch({ type: "incrementIndex" });
+            else dispatch({ type: "completed" });
           }}
         >
           Next

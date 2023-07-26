@@ -6,6 +6,8 @@ import Error from "./component/Error";
 import Main from "./component/Main";
 import Home from "./component/Home";
 import MountQuestions from "./component/MountQuestions";
+import Progress from "./component/Progress";
+import Finished from "./component/Finished";
 const initalState = {
   questions: [],
   // "loading", "error", "ready", "active", "finished"
@@ -15,6 +17,7 @@ const initalState = {
   points: 0,
   attendedQuestions: 0,
 };
+let maxPoints;
 const reducer = function (state, action) {
   switch (action.type) {
     case "dataReceived":
@@ -41,6 +44,9 @@ const reducer = function (state, action) {
 
     case "incrementIndex":
       return { ...state, index: state.index + 1, answer: null };
+
+    case "completed":
+      return { ...state, status: "finished" };
     default:
       return "hi";
   }
@@ -51,11 +57,18 @@ function App() {
     dispatch,
   ] = useReducer(reducer, initalState);
 
+  if (questions.length > 0) {
+    maxPoints = questions.reduce((accumulator, currentValue) => {
+      if (typeof currentValue.points === "number")
+        return accumulator + currentValue.points;
+      return accumulator;
+    }, 0);
+  }
   useEffect(() => {
     fetch("http://localhost:9000/questions")
       .then((res) => res.json())
       .then((data) => dispatch({ type: "dataReceived", payload: data }))
-      .catch((err) => dispatch({ type: "dataFailed" }));
+      .catch(() => dispatch({ type: "dataFailed" }));
   }, []);
 
   return (
@@ -70,13 +83,28 @@ function App() {
           <Home questions={questions} dispatch={dispatch} />
         )}
         {status === "active" && (
-          <MountQuestions
-            question={questions[index]}
-            dispatch={dispatch}
-            answer={answer}
-            attendedQuestions={attendedQuestions}
-            points={points}
-          />
+          <>
+            <progress
+              max={questions.length}
+              value={attendedQuestions}
+            ></progress>
+            <Progress
+              totalQuestions={questions.length}
+              attendedQuestions={attendedQuestions}
+              totalpoints={maxPoints}
+              gainedPoints={points}
+            />
+            <MountQuestions
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+              attendedQuestions={attendedQuestions}
+            />
+          </>
+        )}
+
+        {status === "finished" && (
+          <Finished maxPoints={maxPoints} points={points} />
         )}
       </Main>
     </div>

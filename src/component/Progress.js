@@ -5,7 +5,7 @@ function Progress({
   gainedPoints,
 }) {
   return (
-    <div className="progress">
+    <div className="progress pt-10">
       <h2>
         {attendedQuestions || 0} / {totalQuestions} question
       </h2>

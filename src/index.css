@@ -259,3 +259,8 @@ progress {
   font-size: inherit;
   padding: 0.8rem;
 }
+
+
+.pt-10 {
+  padding-top: 30px;
+}
